@@ -7,14 +7,16 @@ import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -90,18 +92,14 @@ public class ChatListener implements Listener {
             return null;
         }
 
-        final List<?> rules = config.getList("bot.keywordReplies.rules");
-        if (rules == null || rules.isEmpty()) {
+        final List<Map<?, ?>> rules = config.getMapList("bot.keywordReplies.rules");
+        if (rules.isEmpty()) {
             return null;
         }
 
-        for (final Object ruleObj : rules) {
-            if (!(ruleObj instanceof ConfigurationSection rule)) {
-                continue;
-            }
-
-            final List<String> keywords = rule.getStringList("keywords");
-            final List<String> replies = rule.getStringList("replies");
+        for (final Map<?, ?> rule : rules) {
+            final List<String> keywords = this.toStringList(rule.get("keywords"));
+            final List<String> replies = this.toStringList(rule.get("replies"));
 
             if (keywords.isEmpty() || replies.isEmpty()) {
                 continue;
@@ -127,6 +125,21 @@ public class ChatListener implements Listener {
         }
 
         return null;
+    }
+
+    private List<String> toStringList(final Object rawList) {
+        if (!(rawList instanceof List<?> list)) {
+            return Collections.emptyList();
+        }
+
+        final List<String> result = new ArrayList<>();
+        for (final Object item : list) {
+            if (item != null) {
+                result.add(item.toString());
+            }
+        }
+
+        return result;
     }
 
     /**
