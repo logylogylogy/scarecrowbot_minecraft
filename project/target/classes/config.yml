@@ -1,0 +1,90 @@
+# Scarecrow Bot Configuration
+
+bot:
+  # Display name of the bot
+  name: "Scarecrow"
+
+  # Chat message format
+  # Placeholders: {botName}, {message}
+  chatFormat: "<{botName}> {message}"
+
+  # Enable/disable chat responses
+  respondToChat: true
+
+  # Random replies to any chat message
+  randomReply:
+    enabled: true
+    chancePercent: 10
+    cooldownSecondsGlobal: 3
+    cooldownSecondsPerPlayer: 8
+    messages:
+      - "..."
+      - "ㅎㅎ"
+      - "흠"
+      - "ㅇㅋ"
+      - "?"
+
+  # Keyword-triggered replies
+  keywordReplies:
+    enabled: true
+    cooldownSecondsGlobal: 2
+    cooldownSecondsPerPlayer: 6
+    rules:
+      - keywords:
+          - "안녕"
+          - "hi"
+          - "hello"
+        replies:
+          - "안녕!"
+          - "반가워!"
+          - "ㅎㅇ"
+      - keywords:
+          - "허수아비"
+          - "scarecrow"
+        replies:
+          - "나 여기 고정임"
+          - "때리면 아픔 ㅠ"
+          - "저 여기 있어요"
+      - keywords:
+          - "죽어"
+          - "die"
+          - "kill"
+        replies:
+          - "난 안 죽어 ㅋㅋ"
+          - "불사신임"
+          - "HP 1에서 멈춤"
+
+scarecrow:
+  # Entity type: VILLAGER or ZOMBIE
+  entityType: "VILLAGER"
+
+  # Show custom name above entity
+  visibleName: true
+
+  # Lock entity to ground (prevent movement)
+  lockToGround: true
+
+  # Make entity silent (no sounds)
+  silent: true
+
+  # Make entity completely invulnerable (not recommended, use minHP instead)
+  invulnerable: false
+
+  # Maximum health points
+  maxHP: 100.0
+
+  # Minimum health points (prevents death)
+  minHP: 1.0
+
+  # Show HP in custom name
+  showHpInName: true
+
+  # Name format with HP
+  # Placeholders: {botName}, {hp}, {maxHp}
+  nameHpFormat: "{botName} §c[HP {hp}/{maxHp}]"
+
+  # Play hurt sound when damaged
+  hurtSound: true
+
+  # Spawn damage particles when damaged
+  damageParticles: true

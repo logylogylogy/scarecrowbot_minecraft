@@ -1,0 +1,30 @@
+name: ScarecrowBot
+version: '1.0'
+main: com.example.scarecrowbot.ScarecrowBotPlugin
+api-version: '1.21'
+author: ScarecrowDev
+description: Immortal scarecrow player bot that can take damage and chat
+
+commands:
+  scarecrow:
+    description: Main scarecrow command
+    usage: /scarecrow <create|remove|move|tp|heal|damage|status|say|togglechat>
+    permission: scarecrow.use
+    aliases: [sc, bot]
+
+permissions:
+  scarecrow.use:
+    description: Basic scarecrow command access
+    default: true
+  scarecrow.admin:
+    description: Full administrative access
+    default: op
+    children:
+      scarecrow.manage: true
+      scarecrow.say: true
+  scarecrow.manage:
+    description: Manage scarecrow (create, remove, move, heal, damage, status)
+    default: op
+  scarecrow.say:
+    description: Make scarecrow speak
+    default: op
