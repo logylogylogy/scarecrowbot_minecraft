@@ -33,6 +33,27 @@ The compiled JAR will be in `target/ScarecrowBot-1.0-SNAPSHOT.jar`
 4. Configure `plugins/ScarecrowBot/config.yml` as desired
 5. Use `/scarecrow create` to spawn your bot
 
+## How to Use (빠른 시작)
+
+1. 서버의 `plugins/ScarecrowBot/config.yml`에서 기본 설정을 확인하세요. 특히 `bot.keywordReplies.rules`가 **`keywords`와 `replies` 키를 가진 맵 리스트** 형태로 되어 있는지 확인해야 합니다.
+   ```yaml
+   bot:
+     respondToChat: true
+     keywordReplies:
+       enabled: true
+       rules:
+         - keywords:
+             - "hi"
+             - "hello"
+           replies:
+             - "Hello there!"
+             - "Hi!"
+   ```
+2. 서버를 시작한 뒤 `/scarecrow create`로 허수아비를 소환합니다. 기본 이름(`Scarecrow`)을 사용하거나 `/scarecrow create 새이름`처럼 이름을 함께 입력해도 됩니다.
+3. 플레이어가 채팅에 `hi`, `hello` 등 규칙에 포함된 단어를 입력하면 설정된 답변 중 하나를 무작위로 응답합니다.
+4. 랜덤 응답이 필요하면 `bot.randomReply.enabled`를 `true`로 두고, 확률(`chancePercent`)과 쿨다운을 원하는 값으로 조정합니다.
+5. 채팅 응답을 끄고 싶을 때는 `/scarecrow togglechat` 명령을 사용하거나 `respondToChat: false`로 설정 후 서버를 리로드/재시작하세요.
+
 ## Commands
 
 | Command | Permission | Description |
