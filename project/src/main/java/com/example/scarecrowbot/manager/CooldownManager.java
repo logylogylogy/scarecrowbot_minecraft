@@ -2,9 +2,9 @@ package com.example.scarecrowbot.manager;
 
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Manages cooldowns for chat responses (global and per-player)
@@ -12,8 +12,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CooldownManager {
 
-    private final Map<String, Long> globalCooldowns = new HashMap<>();
-    private final Map<String, Map<UUID, Long>> playerCooldowns = new HashMap<>();
+    private final Map<String, Long> globalCooldowns = new ConcurrentHashMap<>();
+    private final Map<String, Map<UUID, Long>> playerCooldowns = new ConcurrentHashMap<>();
 
     /**
      * Check if a global cooldown is active
@@ -22,11 +22,10 @@ public class CooldownManager {
      * @return True if on cooldown
      */
     public boolean isOnGlobalCooldown(final String key) {
-        if (!this.globalCooldowns.containsKey(key)) {
+        final Long expirationTime = this.globalCooldowns.get(key);
+        if (expirationTime == null) {
             return false;
         }
-
-        final long expirationTime = this.globalCooldowns.get(key);
         final long currentTime = System.currentTimeMillis();
 
         if (currentTime >= expirationTime) {
@@ -45,16 +44,15 @@ public class CooldownManager {
      * @return True if on cooldown
      */
     public boolean isOnPlayerCooldown(final UUID playerUuid, final String key) {
-        if (!this.playerCooldowns.containsKey(key)) {
-            return false;
-        }
-
         final Map<UUID, Long> playerMap = this.playerCooldowns.get(key);
-        if (!playerMap.containsKey(playerUuid)) {
+        if (playerMap == null) {
             return false;
         }
 
-        final long expirationTime = playerMap.get(playerUuid);
+        final Long expirationTime = playerMap.get(playerUuid);
+        if (expirationTime == null) {
+            return false;
+        }
         final long currentTime = System.currentTimeMillis();
 
         if (currentTime >= expirationTime) {
@@ -84,7 +82,7 @@ public class CooldownManager {
      * @param seconds Duration in seconds
      */
     public void setPlayerCooldown(final UUID playerUuid, final String key, final int seconds) {
-        final Map<UUID, Long> playerMap = this.playerCooldowns.computeIfAbsent(key, k -> new HashMap<>());
+        final Map<UUID, Long> playerMap = this.playerCooldowns.computeIfAbsent(key, k -> new ConcurrentHashMap<>());
         final long expirationTime = System.currentTimeMillis() + (seconds * 1000L);
         playerMap.put(playerUuid, expirationTime);
     }
